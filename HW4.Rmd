@@ -1,0 +1,135 @@
+---
+title: "HW4"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r}
+#1a
+
+dat = read.table("wine.txt")
+plot(mortality ~ consumption, data=dat)
+
+#No it would not work, because using a linear regression line to predict mortality, it looks like it would be super inaccurate, the data isn't linear
+
+```
+
+```{r}
+#1b
+dat = read.table("wine.txt")
+
+plot(log(mortality) ~ log(consumption), data=dat)
+
+```
+
+```{r}
+#1c 
+
+#The linear regression subjects model assumes that Yi is a realization of Yi = β′xi + εi, i ∈{1,...,18}, where Yi is immortality of country i, xi is consumption at country i and where β = (β1,β2)′∈R2 is an unknown vector of regression coefficients; ε1,...,ε18 are iid with mean 0 and unknown variance σ2 ∈[0,∞).
+
+```
+
+```{r}
+#1d
+
+X = cbind(1, log(dat$consumption))
+y=log(dat$mortality)
+
+beta.hat=qr.solve(crossprod(X), crossprod(X,y))
+beta.hat
+
+#Solves all unknown parameteres above
+#2.5555519 - 0.3555959x 
+
+#Standard Error as well just in case its needed
+fitted=X%*%beta.hat
+residuals=y-fitted
+sE=sqrt(sum(residuals^2)/(length(y)-length(beta.hat)))
+sE
+```
+```{r}
+#1e
+
+#2.5555519 - 0.3555959(3.7)
+#1.23984707 estimated log mortality rate for a country with log consumption of 3.7
+
+```
+
+```{r}
+#1f
+
+dat = read.table("wine.txt")
+
+plot(log(mortality) ~ log(consumption), data=dat)
+abline(2.55555519, -0.3555959, col = "darkgreen")
+#abline(y int, slope) to print the line
+
+```
+
+```{r}
+#1g
+
+ln = log(14.4)
+ln
+mort = 2.5555519 - 0.3555959* ln 
+mort
+
+#Then to find the predicted mortality
+ans = exp(mort)
+ans
+
+#To get an answer of 4.988307
+
+
+```
+
+```{r}
+#2a
+
+dat = read.table("machine.txt")
+plot(output ~ input, data=dat)
+
+```
+
+```{r}
+#2b
+X = cbind(1, dat$input, (dat$input)^2)
+#xi3 is xi2^2
+y=dat$output
+
+beta.hat=qr.solve(crossprod(X), crossprod(X,y))
+beta.hat
+#same setup as in 1
+
+fitted=X%*%beta.hat
+residuals=y-fitted
+sE=sqrt(sum(residuals^2)/(length(y)-length(beta.hat)))
+sE
+
+```
+
+```{r}
+#2c
+
+dat = read.table("machine.txt")
+plot(output ~ input, data=dat)
+
+#Using code from the lecture notes
+x.vals=seq(from=0, to=1, by=0.001)
+X.new=cbind(1, x.vals, x.vals^2)
+y.hat=X.new%*%beta.hat
+lines(x.vals, y.hat, col="darkgreen")
+
+```
+
+
+
+
+
+
+
+
+
+
+
